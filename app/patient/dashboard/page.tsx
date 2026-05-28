@@ -66,13 +66,17 @@ export default function PatientDashboard() {
   );
   const pending = appointments.filter((a) => a.status === 'pending');
 
+  const email = user?.primaryEmailAddress?.emailAddress || '';
+  const defaultName = email ? email.split('@')[0].replace(/[0-9]/g, '') : 'Patient';
+  const displayName = user?.firstName || (defaultName.charAt(0).toUpperCase() + defaultName.slice(1)) || 'Patient';
+
   return (
     <div className="space-y-6">
       {/* Welcome */}
       <div className="bg-gradient-to-br from-brand-600 to-brand-700/90 rounded-2xl p-7 text-white flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-xl shadow-brand-600/5">
         <div>
           <h1 className="text-xl font-bold mb-0.5 tracking-tight">
-            Hello, {user?.firstName || 'Patient'}! 👋
+            Hello, {displayName}! 👋
           </h1>
           <p className="text-[12px] text-blue-100 font-semibold uppercase tracking-wider opacity-80">
             {new Date().toLocaleDateString('en-US', {

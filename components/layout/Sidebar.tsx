@@ -49,6 +49,9 @@ export default function Sidebar() {
   const role = email === ADMIN_EMAIL.toLowerCase() ? 'admin' : 'patient';
   const navItems = role === 'admin' ? adminNav : patientNav;
 
+  const defaultName = email.split('@')[0].replace(/[0-9]/g, '');
+  const displayName = user?.firstName || (defaultName.charAt(0).toUpperCase() + defaultName.slice(1)) || 'User';
+
   const handleSignOut = async () => {
     await signOut({ redirectUrl: '/' });
   };
@@ -120,12 +123,12 @@ export default function Sidebar() {
       )}>
         <div className={cn("flex items-center gap-3", isCollapsed && "flex-col")}>
           <div className="w-8 h-8 rounded-full bg-brand-50 flex items-center justify-center text-[11px] font-bold text-brand-600 shrink-0">
-            {user?.firstName?.[0] || 'U'}
+            {displayName[0] || 'U'}
           </div>
           {!isCollapsed && (
             <div className="flex-1 min-w-0 animate-in fade-in duration-300">
               <p className="text-[13px] font-bold text-foreground truncate leading-tight">
-                {user?.fullName || 'User'}
+                {user?.fullName || displayName}
               </p>
               <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">{role}</p>
             </div>

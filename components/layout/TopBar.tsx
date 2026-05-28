@@ -9,6 +9,9 @@ export default function TopBar() {
   const email = user?.primaryEmailAddress?.emailAddress || '';
   const role = email === ADMIN_EMAIL ? 'admin' : 'patient';
 
+  const defaultName = email.split('@')[0].replace(/[0-9]/g, '');
+  const displayName = user?.firstName || (defaultName.charAt(0).toUpperCase() + defaultName.slice(1)) || 'User';
+
   return (
     <header className="h-16 flex items-center justify-between px-8 bg-white border-b border-slate-100 shrink-0">
       {/* Search */}
@@ -38,11 +41,11 @@ export default function TopBar() {
         <div className="w-px h-7 bg-slate-100 mx-2" />
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-full bg-brand-50 flex items-center justify-center text-[11px] font-semibold text-brand-600">
-            {user?.firstName?.[0] || 'U'}
+            {displayName[0] || 'U'}
           </div>
           <div className="hidden md:block">
             <p className="text-[13px] font-medium text-foreground leading-tight">
-              {user?.fullName || 'User'}
+              {user?.fullName || displayName}
             </p>
             <p className="text-[10px] text-slate-400 capitalize font-medium">{role}</p>
           </div>
