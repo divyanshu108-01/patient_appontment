@@ -11,6 +11,7 @@ import {
   ChevronRight,
   AlertTriangle,
   Loader2,
+  AlertCircle,
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -73,23 +74,23 @@ export default function PatientDashboard() {
   return (
     <div className="space-y-6">
       {/* Welcome */}
-      <div className="bg-gradient-to-br from-brand-600 to-brand-700/90 rounded-2xl p-7 text-white flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-xl shadow-brand-600/5">
+      <div className="bg-white border border-slate-100 rounded-2xl p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
         <div>
-          <h1 className="text-xl font-bold mb-0.5 tracking-tight">
-            Hello, {displayName}! 👋
+          <h1 className="text-xl font-medium text-slate-800 tracking-tight">
+            Hello, <span className="font-semibold text-brand-600">{displayName}</span> 👋
           </h1>
-          <p className="text-[12px] text-blue-100 font-semibold uppercase tracking-wider opacity-80">
+          <p className="text-[13px] text-slate-400 mt-1">
             {new Date().toLocaleDateString('en-US', {
+              weekday: 'long',
               month: 'long',
               day: 'numeric',
-              year: 'numeric',
             })}
           </p>
         </div>
         <div className="text-right hidden md:block">
-          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-blue-50/50 mb-1">Health Status</p>
-          <div className="px-3 py-1 bg-white/10 rounded-full border border-white/10 text-[11px] font-bold">
-            All reports normal
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-50 text-emerald-600 rounded-full border border-emerald-100">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-[12px] font-semibold">All reports normal</span>
           </div>
         </div>
       </div>
@@ -202,14 +203,22 @@ export default function PatientDashboard() {
                       &ldquo;{appt.visit_reason}&rdquo;
                     </td>
                     <td className="px-6 py-3">
-                      <span
-                        className={cn(
-                          'inline-flex px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-widest',
-                          getStatusColor(appt.status)
+                      <div className="flex flex-col items-start gap-1">
+                        <span
+                          className={cn(
+                            'inline-flex px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-widest',
+                            getStatusColor(appt.status)
+                          )}
+                        >
+                          {appt.status}
+                        </span>
+                        {appt.admin_note && (
+                          <div className="text-[10px] text-slate-500 flex items-start gap-1 max-w-[140px] mt-0.5">
+                            <AlertCircle className="w-3 h-3 text-amber-500 shrink-0" />
+                            <span className="italic leading-tight">{appt.admin_note}</span>
+                          </div>
                         )}
-                      >
-                        {appt.status}
-                      </span>
+                      </div>
                     </td>
                     <td className="px-6 py-3 text-right">
                       {['pending', 'approved'].includes(appt.status) && (
