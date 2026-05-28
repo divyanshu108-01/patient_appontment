@@ -113,6 +113,12 @@ export default function AdminDoctorsPage() {
       const updated = await res.json();
       setDoctors((prev) => prev.map((d) => (d.id === updated.id ? updated : d)));
       setEditingDoctor(null);
+    } else {
+      const errData = await res.json();
+      const errorMsg = errData.details?.fieldErrors 
+        ? Object.values(errData.details.fieldErrors).flat().join(', ')
+        : (errData.error || 'Failed to update doctor');
+      alert(`Error: ${errorMsg}`);
     }
     setSubmitting(false);
   };
