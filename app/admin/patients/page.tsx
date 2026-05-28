@@ -96,9 +96,13 @@ export default function AdminPatientsPage() {
                       </span>
                     </td>
                     <td className="px-6 py-3 text-right">
-                      <button className="h-8 w-8 inline-flex items-center justify-center rounded-lg border border-slate-100 text-slate-300 hover:text-brand-600 hover:bg-brand-50 transition-all">
-                        <ChevronRight className="w-3.5 h-3.5" />
-                      </button>
+                      <a 
+                        href={`mailto:${p.patient_email}`}
+                        className="h-8 w-8 inline-flex items-center justify-center rounded-lg border border-slate-100 text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-all"
+                        title="Email Patient"
+                      >
+                        <Mail className="w-3.5 h-3.5" />
+                      </a>
                     </td>
                   </tr>
                 ))

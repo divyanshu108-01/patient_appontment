@@ -2,6 +2,7 @@ import { auth, createClerkClient } from '@clerk/nextjs/server';
 import { supabase } from '@/lib/supabase';
 import { type NextRequest, NextResponse } from 'next/server';
 import { createDoctorSchema } from '@/lib/validations';
+import { ADMIN_EMAIL } from '@/lib/constants';
 
 const clerkClient = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY });
 
@@ -16,7 +17,8 @@ export async function PATCH(
   }
 
   const user = await clerkClient.users.getUser(userId);
-  if (user.publicMetadata?.role !== 'admin') {
+  const email = user.emailAddresses.find(e => e.id === user.primaryEmailAddressId)?.emailAddress?.toLowerCase() || '';
+  if (email !== ADMIN_EMAIL.toLowerCase()) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 
@@ -56,7 +58,8 @@ export async function DELETE(
   }
 
   const user = await clerkClient.users.getUser(userId);
-  if (user.publicMetadata?.role !== 'admin') {
+  const email = user.emailAddresses.find(e => e.id === user.primaryEmailAddressId)?.emailAddress?.toLowerCase() || '';
+  if (email !== ADMIN_EMAIL.toLowerCase()) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 

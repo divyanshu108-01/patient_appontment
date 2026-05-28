@@ -13,6 +13,7 @@ import {
   User,
   ExternalLink,
   Loader2,
+  AlertTriangle,
 } from 'lucide-react';
 
 interface Appointment {
@@ -34,6 +35,9 @@ export default function AdminAppointmentsPage() {
   const [statusFilter, setStatusFilter] = useState('all');
   const [selectedAppt, setSelectedAppt] = useState<string | null>(null);
   const [note, setNote] = useState('');
+  const [rejectModal, setRejectModal] = useState<{ show: boolean; id: string | null; note: string }>({
+    show: false, id: null, note: ''
+  });
 
   useEffect(() => {
     fetch('/api/admin/appointments')
@@ -193,11 +197,7 @@ export default function AdminAppointmentsPage() {
                             <CheckCircle2 className="w-4 h-4" />
                           </button>
                           <button
-                            onClick={() => {
-                              const noteInput = prompt('Rejection reason (optional):');
-                              setNote(noteInput || '');
-                              handleAction(appt.id, 'rejected');
-                            }}
+                            onClick={() => setRejectModal({ show: true, id: appt.id, note: '' })}
                             className="w-8 h-8 rounded-lg bg-red-50 text-red-600 flex items-center justify-center hover:bg-red-100 transition-colors"
                           >
                             <XCircle className="w-4 h-4" />
@@ -216,6 +216,49 @@ export default function AdminAppointmentsPage() {
           </table>
         </div>
       </div>
+
+      {/* Rejection Modal */}
+      {rejectModal.show && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
+          <div className="bg-white w-full max-w-sm rounded-xl border border-slate-100 shadow-2xl p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center">
+                <AlertTriangle className="w-5 h-5 text-red-500" />
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-foreground">Reject Appointment</h3>
+                <p className="text-[11px] text-slate-400">Provide a reason for rejection (optional)</p>
+              </div>
+            </div>
+            <textarea
+              value={rejectModal.note}
+              onChange={(e) => setRejectModal({ ...rejectModal, note: e.target.value })}
+              placeholder="Reason for rejection..."
+              className="w-full h-24 p-3 rounded-lg bg-slate-50 border border-slate-100 text-[13px] outline-none focus:ring-2 focus:ring-red-100 resize-none placeholder:text-slate-400 mb-4"
+            />
+            <div className="flex gap-2">
+              <button
+                onClick={() => setRejectModal({ show: false, id: null, note: '' })}
+                className="flex-1 h-9 rounded-lg border border-slate-100 text-sm font-medium text-slate-500 hover:bg-slate-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  if (rejectModal.id) {
+                    setNote(rejectModal.note);
+                    handleAction(rejectModal.id, 'rejected');
+                    setRejectModal({ show: false, id: null, note: '' });
+                  }
+                }}
+                className="flex-1 h-9 rounded-lg bg-red-500 text-white text-sm font-semibold hover:bg-red-600 transition-colors flex items-center justify-center gap-1.5"
+              >
+                Reject
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
