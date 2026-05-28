@@ -63,11 +63,11 @@ export default function Sidebar() {
         "flex items-center gap-3 px-5 h-[72px] shrink-0 transition-all duration-300",
         isCollapsed && "px-0 justify-center"
       )}>
-        <div className="w-9 h-9 rounded-xl bg-brand-600 flex items-center justify-center shadow-lg shadow-brand-600/25 shrink-0">
-          <Heart className="w-[18px] h-[18px] text-white" fill="white" />
+        <div className="w-12 h-12 rounded-xl shrink-0 relative z-10 flex items-center justify-center">
+          <img src="/logo.png" alt="Nano Banana Logo" className="w-[140%] h-[140%] object-cover scale-110 drop-shadow-lg" />
         </div>
         {!isCollapsed && (
-          <span className="text-[17px] font-bold text-foreground tracking-tight animate-in fade-in duration-300">
+          <span className="text-[17px] font-bold text-foreground tracking-tight animate-in fade-in duration-300 relative z-0">
             MedCare
           </span>
         )}
