@@ -84,6 +84,10 @@ function BookingForm() {
     setError(null);
 
     try {
+      const userEmail = user?.primaryEmailAddress?.emailAddress || '';
+      const emailName = userEmail.split('@')[0].replace(/[0-9]/g, '');
+      const derivedName = user?.fullName || (emailName.charAt(0).toUpperCase() + emailName.slice(1)) || 'Patient';
+
       const res = await fetch('/api/appointments', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -91,8 +95,8 @@ function BookingForm() {
           doctor_id: doctorId,
           slot_id: selectedSlot,
           visit_reason: reason,
-          patient_name: user?.fullName || 'Patient',
-          patient_email: user?.primaryEmailAddress?.emailAddress || '',
+          patient_name: derivedName,
+          patient_email: userEmail,
         }),
       });
 

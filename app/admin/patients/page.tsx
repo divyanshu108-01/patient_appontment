@@ -15,7 +15,9 @@ interface Patient {
   patient_id: string;
   patient_name: string;
   patient_email: string;
-  count: number;
+  total_appointments: number;
+  pending: number;
+  approved: number;
 }
 
 export default function AdminPatientsPage() {
@@ -81,7 +83,12 @@ export default function AdminPatientsPage() {
                         <div className="w-8 h-8 rounded-full bg-brand-50 flex items-center justify-center text-brand-600">
                           <User className="w-4 h-4" />
                         </div>
-                        <span className="font-semibold text-foreground tracking-tight">{p.patient_name}</span>
+                        <span className="font-semibold text-foreground tracking-tight">
+                          {p.patient_name === 'Patient' ? (() => {
+                            const emailName = p.patient_email.split('@')[0].replace(/[0-9]/g, '');
+                            return emailName.charAt(0).toUpperCase() + emailName.slice(1);
+                          })() : p.patient_name}
+                        </span>
                       </div>
                     </td>
                     <td className="px-6 py-3">
@@ -92,7 +99,7 @@ export default function AdminPatientsPage() {
                     </td>
                     <td className="px-6 py-3">
                       <span className="px-3 py-1 rounded-full bg-brand-50 text-brand-600 font-bold text-[10px] uppercase tracking-wider">
-                        {p.count} Bookings
+                        {p.total_appointments} Bookings
                       </span>
                     </td>
                     <td className="px-6 py-3 text-right">

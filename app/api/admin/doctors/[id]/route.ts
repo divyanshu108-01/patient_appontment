@@ -24,23 +24,34 @@ export async function PATCH(
 
   const { id } = await params;
   const body = await request.json();
-  const parsed = createDoctorSchema.safeParse(body);
+
+  // Use partial schema for updates - fields are optional
+  const updateSchema = createDoctorSchema.partial();
+  const parsed = updateSchema.safeParse(body);
 
   if (!parsed.success) {
+    console.error('Doctor update validation failed:', parsed.error.flatten());
     return NextResponse.json(
       { error: 'Validation failed', details: parsed.error.flatten() },
       { status: 400 }
     );
   }
 
+  const updateData: Record<string, string> = {};
+  if (body.name) updateData.name = body.name;
+  if (body.specialty) updateData.specialty = body.specialty;
+  if (body.qualification) updateData.qualification = body.qualification;
+  if (body.bio !== undefined) updateData.bio = body.bio;
+
   const { data, error } = await supabase
     .from('doctors')
-    .update(parsed.data)
+    .update(updateData)
     .eq('id', id)
     .select()
     .single();
 
   if (error) {
+    console.error('Doctor update DB error:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
