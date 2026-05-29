@@ -3,7 +3,17 @@ GRANT USAGE ON SCHEMA public TO anon, authenticated;
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO anon, authenticated;
 GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO anon, authenticated;
 
--- 1. Doctors table
+-- 1. Profiles table (Synced from Clerk)
+CREATE TABLE IF NOT EXISTS profiles (
+  id TEXT PRIMARY KEY, -- Clerk user ID
+  name TEXT NOT NULL,
+  email TEXT NOT NULL UNIQUE,
+  role TEXT DEFAULT 'patient',
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- 2. Doctors table
 CREATE TABLE IF NOT EXISTS doctors (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   name TEXT NOT NULL,

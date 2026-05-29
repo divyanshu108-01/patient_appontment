@@ -59,11 +59,14 @@ export default function Sidebar() {
   const NavContent = () => (
     <>
       {/* Logo Section */}
-      <div className={cn(
-        "flex items-center gap-3 px-5 h-[72px] shrink-0 transition-all duration-300",
-        isCollapsed && "px-0 justify-center"
-      )}>
-        <div className="w-10 h-10 rounded-xl shrink-0 overflow-hidden flex items-center justify-center bg-white">
+      <div 
+        onClick={toggleSidebar}
+        className={cn(
+          "flex items-center gap-3 px-5 h-[72px] shrink-0 transition-all duration-300 cursor-pointer hover:bg-slate-50/50 group/logo",
+          isCollapsed && "px-0 justify-center hover:bg-transparent"
+        )}
+      >
+        <div className="w-10 h-10 rounded-xl shrink-0 overflow-hidden flex items-center justify-center bg-white shadow-sm border border-slate-100 group-hover/logo:scale-105 transition-transform">
           <img src="/logo.png" alt="MedCare Logo" className="w-full h-full object-contain" />
         </div>
         {!isCollapsed && (
@@ -174,13 +177,7 @@ export default function Sidebar() {
           mobileOpen ? 'translate-x-0 !w-[260px]' : '-translate-x-full md:translate-x-0'
         )}
       >
-        {/* Toggle Button for Desktop */}
-        <button
-          onClick={toggleSidebar}
-          className="hidden md:flex absolute -right-3 top-8 w-6 h-6 rounded-full bg-white border border-slate-100 shadow-sm items-center justify-center text-slate-400 hover:text-brand-600 hover:shadow-md transition-all z-50"
-        >
-          {isCollapsed ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronLeft className="w-3.5 h-3.5" />}
-        </button>
+
 
         {mobileOpen && (
           <button
